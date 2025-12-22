@@ -1,0 +1,17 @@
+# --------- pytorch --------- #
+torch>=2.0.0
+torchvision>=0.15.0
+lightning>=2.0.0
+
+# --------- hydra --------- #
+hydra-core
+hydra-colorlog
+hydra-optuna-sweeper
+omegaconf
+
+# --------- others --------- #
+rootutils       # standardizing the project root setup
+rich            # beautiful text formatting in terminal
+pytest          # tests
+tensorboard     # logging training metrics
+mlflow>=1.0.0   # logging using MLFlow
