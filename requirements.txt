@@ -1,7 +1,7 @@
 # --------- pytorch --------- #
-torch>=2.0.0
-torchvision>=0.15.0
-lightning>=2.0.0
+torch>=2.9.1
+torchvision>=0.24
+lightning>=2.5.5
 
 # --------- hydra --------- #
 hydra-core
@@ -14,4 +14,4 @@ rootutils       # standardizing the project root setup
 rich            # beautiful text formatting in terminal
 pytest          # tests
 tensorboard     # logging training metrics
-mlflow>=1.0.0   # logging using MLFlow
+mlflow>=3.8.0   # logging using MLFlow
