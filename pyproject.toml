@@ -16,4 +16,5 @@ Issues = "https://github.com/avansp/template-hydra-lightning/issues"
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
-
+[project.scripts]
+train = "modules.train:train"

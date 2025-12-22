@@ -1,4 +1,8 @@
 import rootutils
+import hydra
+from omegaconf import DictConfig
+from loguru import logger
+from datetime import datetime
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -18,4 +22,16 @@ rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # more info: https://github.com/ashleve/rootutils
 # ------------------------------------------------------------------------------------ #
 
+@hydra.main(version_base="1.3", config_path="../configs", config_name="train.yaml")
+def train(cfg: DictConfig) -> None:
+    """
+    Main entry point for training
+    
+    :param cfg: A DictConfig configuration composed by Hydra
+    """
+    # log the time starting the train
+    logger.info(f"Train {cfg.name=} started at {datetime.now()}")
 
+
+if __name__ == "__main__":
+    train()

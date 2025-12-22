@@ -1,0 +1,6 @@
+# @package _global_
+
+# specify here default configuration
+
+# this name will determine output path, default is "train"
+name: "train"
