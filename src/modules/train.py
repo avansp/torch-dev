@@ -1,8 +1,9 @@
 import rootutils
 import hydra
 from omegaconf import DictConfig
-from loguru import logger
-from datetime import datetime
+import time
+import logging
+import datetime
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -30,7 +31,14 @@ def train(cfg: DictConfig) -> None:
     :param cfg: A DictConfig configuration composed by Hydra
     """
     # log the time starting the train
-    logger.info(f"Train {cfg.name=} started at {datetime.now()}")
+    start_training = time.process_time()
+    logging.info(f"Train {cfg.name=} started.")
+
+    # ... TRAINING PROCESS ....
+
+    # finish training
+    logging.info(f"Train {cfg.name=} terminated, elapsed {datetime.timedelta(time.process_time() - start_training)}.")
+    logging.info(f"Output dir: {cfg.paths.output_dir}")
 
 
 if __name__ == "__main__":

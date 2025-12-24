@@ -1,6 +1,23 @@
 # @package _global_
 
+# Run this script in the command line as:
+# >> train
+#
+# or using specific tasks inside the configs/tasks/ folder as:
+# >> train task=<task_name>
+#
+# Note that running this script will create new directories under the PROJECT ROOT:
+#  - data/ for datasets
+#  - outputs/ for logs and checkpoints
+
 # specify here default configuration
 
-# this name will determine output path, default is "train"
+# order of defaults determines the order in which configs override each other
+defaults:
+  - _self_
+  - hydra: default
+  - paths: default
+
+# this name is mandatory to determine output path; see configs/paths/
 name: "train"
+
