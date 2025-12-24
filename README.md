@@ -17,3 +17,8 @@ Install the package script (note use `-e` for development)
 pip install .
 ```
 
+## Training
+
+```{bash}
+train
+```
