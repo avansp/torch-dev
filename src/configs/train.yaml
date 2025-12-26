@@ -1,9 +1,6 @@
 # @package _global_
 
 # Run this script in the command line as:
-# >> train
-#
-# or using specific tasks inside the configs/tasks/ folder as:
 # >> train task=<task_name>
 #
 # Note that running this script will create new directories under the PROJECT ROOT:
@@ -17,6 +14,13 @@ defaults:
   - _self_
   - hydra: default
   - paths: default
+  - task: null
+
+## seed for random number generators in pytorch, numpy and python.random
+seed: 42
+
+# pretty print config tree at the start of the run using Rich library
+print_config: true
 
 # this name is mandatory to determine output path; see configs/paths/
 name: "train"

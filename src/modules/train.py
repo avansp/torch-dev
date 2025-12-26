@@ -23,6 +23,11 @@ rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # more info: https://github.com/ashleve/rootutils
 # ------------------------------------------------------------------------------------ #
 
+from modules.utils import (
+    console
+)
+
+
 @hydra.main(version_base="1.3", config_path="../configs", config_name="train.yaml")
 def train(cfg: DictConfig) -> None:
     """
@@ -33,6 +38,10 @@ def train(cfg: DictConfig) -> None:
     # log the time starting the train
     start_training = time.process_time()
     logging.info(f"Train {cfg.name=} started.")
+
+    # print config
+    if cfg.print_config:
+        console.print_config_tree(cfg, resolve=True, save_to_file=True, save_to_yaml=True)
 
     # ... TRAINING PROCESS ....
 
