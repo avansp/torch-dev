@@ -1,0 +1,4 @@
+defaults:
+  - tqdm
+  - model_summary
+  - model_checkpoint

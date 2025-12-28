@@ -14,6 +14,7 @@ defaults:
   - _self_
   - hydra: default
   - paths: default
+  - callbacks: default
   - data: null
   - model: null
   - task: ???

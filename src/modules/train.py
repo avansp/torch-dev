@@ -5,6 +5,8 @@ import time
 import logging
 import datetime
 import lightning as lit
+from typing import List
+from lightning import Callback, Trainer
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -25,7 +27,8 @@ rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
 
 from modules.utils import (
-    console
+    console,
+    instantiators
 )
 
 
@@ -54,6 +57,9 @@ def train(cfg: DictConfig) -> None:
 
     logging.info(f"Instantiating datamodule <{cfg.data._target_}>")
     datamodule: lit.LightningDataModule = hydra.utils.instantiate(cfg.data)
+
+    logging.info("Instantiating callbacks...")
+    callbacks: List[Callback] = instantiators.instantiate_callbacks(cfg.get("callbacks"))
 
     # finish training
     logging.info(f"Train {cfg.name=} terminated, elapsed {time.process_time() - start_training} sec.")
