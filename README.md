@@ -1,6 +1,6 @@
 <div align="center">
 
-# Template-Hydra-Lightning
+# TORCH-DEV
 
 [![Button Icon]](https://github.com/ashleve/lightning-hydra-template/generate)
 

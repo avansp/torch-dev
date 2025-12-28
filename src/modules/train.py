@@ -49,10 +49,14 @@ def train(cfg: DictConfig) -> None:
         logging.info(f"Setting random seed to {cfg.seed}.")
         lit.seed_everything(cfg.seed, workers=True)
 
-    # ... TRAINING PROCESS ....
+    logging.info(f"Instantiating model <{cfg.model._target_}>")
+    model: lit.LightningModule = hydra.utils.instantiate(cfg.model)
+
+    logging.info(f"Instantiating datamodule <{cfg.data._target_}>")
+    datamodule: lit.LightningDataModule = hydra.utils.instantiate(cfg.data)
 
     # finish training
-    logging.info(f"Train {cfg.name=} terminated, elapsed {datetime.timedelta(time.process_time() - start_training)}.")
+    logging.info(f"Train {cfg.name=} terminated, elapsed {time.process_time() - start_training} sec.")
     logging.info(f"Output dir: {cfg.paths.output_dir}")
 
 

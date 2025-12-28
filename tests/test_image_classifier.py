@@ -3,13 +3,14 @@ from src.modules.model.image_classifier import ImageClassifierLitModule
 import torch
 from hydra import compose, initialize
 from hydra.utils import instantiate
+import pytest
 
 
-def test_image_classifier():
+@pytest.mark.parametrize("channel", [1, 3])
+def test_image_classifier(channel: int):
     """Test creating ImageClassifierLitModule using hydra config."""
     width = 100
     height = 120
-    channel = 3
     output_size = 5
 
     with initialize(version_base="1.3", config_path="../src/configs/model"):
