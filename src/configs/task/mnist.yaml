@@ -1,0 +1,16 @@
+# @package _global_
+
+# This is MNIST classification task
+#
+# To train:
+#   train task=mnist
+#
+
+# set the output folder
+name: mnist
+
+# override sub configs
+defaults:
+  - override /model: image_classifier
+
+
