@@ -14,7 +14,9 @@ defaults:
   - _self_
   - hydra: default
   - paths: default
-  - task: null
+  - data: null
+  - model: null
+  - task: ???
 
 ## seed for random number generators in pytorch, numpy and python.random
 seed: 42

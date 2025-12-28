@@ -4,6 +4,7 @@ from omegaconf import DictConfig
 import time
 import logging
 import datetime
+import lightning as lit
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -42,6 +43,11 @@ def train(cfg: DictConfig) -> None:
     # print config
     if cfg.print_config:
         console.print_config_tree(cfg, resolve=True, save_to_file=True, save_to_yaml=True)
+
+    # set seed for random number generators in pytorch, numpy and python.random
+    if cfg.get("seed"):
+        logging.info(f"Setting random seed to {cfg.seed}.")
+        lit.seed_everything(cfg.seed, workers=True)
 
     # ... TRAINING PROCESS ....
 

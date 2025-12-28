@@ -9,27 +9,25 @@ def test_image_classifier():
     """Test creating ImageClassifierLitModule using hydra config."""
     width = 100
     height = 120
+    channel = 3
     output_size = 5
 
     with initialize(version_base="1.3", config_path="../src/configs/model"):
         cfg = compose(config_name="image_classifier.yaml", overrides=[])
         cfg.width = width
         cfg.height = height
+        cfg.channel = channel
         cfg.num_classes = output_size
 
     model: ImageClassifierLitModule = instantiate(cfg)
 
-    # test input size without channel
-    y = model(torch.rand(50, width, height))
-    assert y.size() == torch.Size([50, output_size])
-
     # test input size with channel
-    y = model(torch.rand(28, 1, width, height))
+    y = model(torch.rand(28, channel, width, height))
     assert y.size() == torch.Size([28, output_size])
 
     # test model step
     loss, preds, y = model.model_step([
-        torch.rand(50, width, height), 
+        torch.rand(50, channel, width, height), 
         torch.randint(low=0, high=output_size-1, size=(50, output_size), dtype=torch.float32)])
     
     assert loss.dtype == torch.float32

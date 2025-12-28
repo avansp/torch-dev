@@ -1,6 +1,7 @@
 _target_: src.modules.model.image_classifier.ImageClassifierLitModule
 width: ???
 height: ???
+channel: ???
 num_classes: ???
 
 optimizer:
@@ -25,3 +26,5 @@ net:
   lin1_size: 64
   lin2_size: 128
   lin3_size: 64
+
+compile: false
