@@ -4,6 +4,7 @@ from omegaconf import DictConfig
 import time
 import logging
 import datetime
+import lightning as lit
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -23,6 +24,11 @@ rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # more info: https://github.com/ashleve/rootutils
 # ------------------------------------------------------------------------------------ #
 
+from modules.utils import (
+    console
+)
+
+
 @hydra.main(version_base="1.3", config_path="../configs", config_name="train.yaml")
 def train(cfg: DictConfig) -> None:
     """
@@ -34,10 +40,23 @@ def train(cfg: DictConfig) -> None:
     start_training = time.process_time()
     logging.info(f"Train {cfg.name=} started.")
 
-    # ... TRAINING PROCESS ....
+    # print config
+    if cfg.print_config:
+        console.print_config_tree(cfg, resolve=True, save_to_file=True, save_to_yaml=True)
+
+    # set seed for random number generators in pytorch, numpy and python.random
+    if cfg.get("seed"):
+        logging.info(f"Setting random seed to {cfg.seed}.")
+        lit.seed_everything(cfg.seed, workers=True)
+
+    logging.info(f"Instantiating model <{cfg.model._target_}>")
+    model: lit.LightningModule = hydra.utils.instantiate(cfg.model)
+
+    logging.info(f"Instantiating datamodule <{cfg.data._target_}>")
+    datamodule: lit.LightningDataModule = hydra.utils.instantiate(cfg.data)
 
     # finish training
-    logging.info(f"Train {cfg.name=} terminated, elapsed {datetime.timedelta(time.process_time() - start_training)}.")
+    logging.info(f"Train {cfg.name=} terminated, elapsed {time.process_time() - start_training} sec.")
     logging.info(f"Output dir: {cfg.paths.output_dir}")
 
 

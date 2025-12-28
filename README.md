@@ -1,6 +1,8 @@
 <div align="center">
 
-# Template-Hydra-Lightning
+# TORCH-DEV
+
+[![Button Icon]](https://github.com/ashleve/lightning-hydra-template/generate)
 
 </div>
 
@@ -19,6 +21,11 @@ pip install .
 
 ## Training
 
+Tasks are defined in the `src/configs/task` folder.
+
 ```{bash}
-train
+train task=...
 ```
+
+
+[Button Icon]: https://img.shields.io/badge/USE_THIS_TEMPLATE-orange?style=for-the-badge
