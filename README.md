@@ -28,7 +28,9 @@ Install the package script (note use `-e` for development)
 pip install .
 ```
 
-## MNIST classification
+## Training
+
+An example of MNIST classification is provided for training. This is defined in the [mnist.yaml](src/configs/task/mnist.yaml) task config file.
 
 ```{bash}
 train task=mnist
@@ -36,6 +38,8 @@ train task=mnist
 
 <details>
 <summary><b>Show data config</b></summary>
+
+MNIST data is defined by [MNISTDataModule](src/modules/data/mnist_datamodule.py) class, and instantiated using a config file in [mnist.yaml](src/configs/task/mnist.yaml) file, as follows:
 
 ```yaml
 data:
@@ -49,5 +53,46 @@ data:
 
 </details>
 
+<details>
+<summary><b>Show console output</b></summary>
+
+```console
+[2025-12-29 08:33:37,155][root][INFO] - Train cfg.name='mnist' started.
+...
+[2025-12-29 08:35:58,100][root][INFO] - Saving last checkpoint to ep0016_vl0.0996_tl0.0139.ckpt
+[2025-12-29 08:35:58,108][root][INFO] - Best checkpoint path: ep0005_vl0.0760_tl0.0372.ckpt
+[2025-12-29 08:35:58,110][root][INFO] - Last train result = {'val/loss': tensor(0.0996), 'val/acc': tensor(0.9764), 'val/acc_best': tensor(0.9792), 'train/loss': tensor(0.0139), 'train/acc': tensor(0.9953)}
+[2025-12-29 08:35:58,110][root][INFO] - Train cfg.name='mnist' terminated, elapsed 143.694471932 sec.
+[2025-12-29 08:35:58,111][root][INFO] - Output dir: /data/avan/dev/torch-dev/outputs/mnist/runs/2025-12-29_08-33-37
+```
+
+</details>
+
+<details>
+<summary><b>Show output directory</b></summary>
+
+```
+output directory
+├── checkpoints           <- Model checkpoints
+│   ├── best_model.ckpt   <- Link to the best model file
+│   ├── last.ckpt         <- Link to the last model file
+│   ├── ....ckpt          <- Saved model file
+│   └── ....ckpt
+│
+├── config_tree.log
+├── config.yaml
+├── console.log
+│
+├── csv                   <- Logs from CSV callback
+│   └── version_0
+│       ├── hparams.yaml
+│       └── metrics.csv
+└── tensorboard           <- Logs from Tensorboard
+    └── version_0
+        ├── ...
+        └── ...
+```
+
+</details>
 
 [Button Icon]: https://img.shields.io/badge/USE_THIS_TEMPLATE-orange?style=for-the-badge
