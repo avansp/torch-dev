@@ -7,6 +7,7 @@ import datetime
 import lightning as lit
 from typing import List
 from lightning import Callback, Trainer
+from lightning.pytorch.loggers import Logger
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -60,6 +61,9 @@ def train(cfg: DictConfig) -> None:
 
     logging.info("Instantiating callbacks...")
     callbacks: List[Callback] = instantiators.instantiate_callbacks(cfg.get("callbacks"))
+
+    logging.info("Instantiating loggers...")
+    logger: List[Logger] = instantiators.instantiate_loggers(cfg.get("logger"))
 
     # finish training
     logging.info(f"Train {cfg.name=} terminated, elapsed {time.process_time() - start_training} sec.")

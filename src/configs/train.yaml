@@ -3,6 +3,8 @@
 # Run this script in the command line as:
 # >> train task=<task_name>
 #
+# See available tasks under configs/task folder.
+#
 # Note that running this script will create new directories under the PROJECT ROOT:
 #  - data/ for datasets
 #  - outputs/ for logs and checkpoints
@@ -15,6 +17,7 @@ defaults:
   - hydra: default
   - paths: default
   - callbacks: default
+  - logger: default
   - data: null
   - model: null
   - task: ???
