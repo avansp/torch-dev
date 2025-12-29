@@ -32,3 +32,8 @@ print_config: true
 # this name is mandatory to determine output path; see configs/paths/
 name: "train"
 
+# chk_path
+chk_path: null
+
+# evaluate test metric
+test: true

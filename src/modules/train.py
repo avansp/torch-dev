@@ -29,8 +29,8 @@ rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 
 from modules.utils import (
     console,
-    instantiators,
-    hparams
+    custom_log,
+    instantiators
 )
 
 
@@ -84,9 +84,16 @@ def train(cfg: DictConfig) -> None:
 
     if logger:
         logging.info("Logging hyperparameters!")
-        hparams.log_hyperparameters(object_dict)
+        custom_log.log_hyperparameters(object_dict)
 
-    # finish training
+    # START TRAINING
+    logging.info("Start training!")
+    trainer.fit(model=model, datamodule=datamodule, ckpt_path=cfg.get("ckpt_path"))
+
+    train_result = trainer.callback_metrics
+    logging.info(f"Last train result = {train_result!r}")
+
+    # FINISH TRAINING
     logging.info(f"Train {cfg.name=} terminated, elapsed {time.process_time() - start_training} sec.")
     logging.info(f"Output dir: {cfg.paths.output_dir}")
 

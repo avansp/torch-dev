@@ -32,7 +32,8 @@ class BestModelCheckpoint(ModelCheckpoint):
             filename: Optional[str] = "ep{epoch:04d}_vl{val/loss:.4f}_tl{train/loss:.4f}",
             monitor: Optional[str] = "val/loss",
             mode: str = "min",
-            save_top_k: Optional[int] = 1
+            save_top_k: Optional[int] = 1,
+            verbose: bool = False
     ):
         super().__init__(
             dirpath = dirpath,
@@ -42,7 +43,8 @@ class BestModelCheckpoint(ModelCheckpoint):
             save_last = False,
             auto_insert_metric_name = False,
             mode = mode,
-            save_top_k = save_top_k
+            save_top_k = save_top_k,
+            verbose = verbose
         )
 
         self.CHECKPOINT_EQUALS_CHAR = ""
