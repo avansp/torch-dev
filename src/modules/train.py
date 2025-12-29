@@ -53,6 +53,8 @@ def train(cfg: DictConfig) -> None:
         logging.info(f"Setting random seed to {cfg.seed}.")
         lit.seed_everything(cfg.seed, workers=True)
 
+    # INSTANTIATIONS
+
     logging.info(f"Instantiating model <{cfg.model._target_}>")
     model: lit.LightningModule = hydra.utils.instantiate(cfg.model)
 
@@ -64,6 +66,9 @@ def train(cfg: DictConfig) -> None:
 
     logging.info("Instantiating loggers...")
     logger: List[Logger] = instantiators.instantiate_loggers(cfg.get("logger"))
+
+    logging.info(f"Instantiating trainer <{cfg.trainer._target_}>")
+    trainer: Trainer = hydra.utils.instantiate(cfg.trainer, callbacks=callbacks, logger=logger)
 
     # finish training
     logging.info(f"Train {cfg.name=} terminated, elapsed {time.process_time() - start_training} sec.")

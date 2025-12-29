@@ -18,6 +18,7 @@ defaults:
   - paths: default
   - callbacks: default
   - logger: default
+  - trainer: default
   - data: null
   - model: null
   - task: ???
