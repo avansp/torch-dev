@@ -3,11 +3,11 @@ import hydra
 from omegaconf import DictConfig
 import time
 import logging
-import datetime
 import lightning as lit
 from typing import List
 from lightning import Callback, Trainer
 from lightning.pytorch.loggers import Logger
+from pathlib import Path
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -30,7 +30,8 @@ rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 from modules.utils import (
     console,
     custom_log,
-    instantiators
+    instantiators,
+    metrics
 )
 
 
@@ -94,7 +95,7 @@ def train(cfg: DictConfig) -> None:
     logging.info(f"Last train result = {train_result!r}")
 
     # FINISH TRAINING
-    logging.info(f"Train {cfg.name=} terminated, elapsed {time.process_time() - start_training} sec.")
+    logging.success(f"Train {cfg.name=} finished, elapsed {time.process_time() - start_training} sec.")
     logging.info(f"Output dir: {cfg.paths.output_dir}")
 
 
