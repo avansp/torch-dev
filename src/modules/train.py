@@ -29,7 +29,8 @@ rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 
 from modules.utils import (
     console,
-    instantiators
+    instantiators,
+    hparams
 )
 
 
@@ -69,6 +70,21 @@ def train(cfg: DictConfig) -> None:
 
     logging.info(f"Instantiating trainer <{cfg.trainer._target_}>")
     trainer: Trainer = hydra.utils.instantiate(cfg.trainer, callbacks=callbacks, logger=logger)
+
+    # SAVE HPARAMS
+
+    object_dict = {
+        "cfg": cfg,
+        "datamodule": datamodule,
+        "model": model,
+        "callbacks": callbacks,
+        "logger": logger,
+        "trainer": trainer,
+    }
+
+    if logger:
+        logging.info("Logging hyperparameters!")
+        hparams.log_hyperparameters(object_dict)
 
     # finish training
     logging.info(f"Train {cfg.name=} terminated, elapsed {time.process_time() - start_training} sec.")
