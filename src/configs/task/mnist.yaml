@@ -13,6 +13,7 @@ name: mnist
 defaults:
   - override /model: image_classifier
 
+# specific image dimension for the MNIST images
 model:
   width: 28
   height: 28
@@ -27,3 +28,18 @@ data:
   train_val_test_split: [55_000, 5_000, 10_000]
   num_workers: 0
   pin_memory: False
+
+# set some variables in the callbacks
+callbacks:
+  early_stopping:
+    monitor: "val/loss"
+    patience: 10
+    mode: "min"
+    verbose: True
+
+  best_model_checkpoint:
+    monitor: "val/loss"
+    mode: "min"
+    verbose: True
+
+

@@ -3,8 +3,11 @@ import hydra
 from omegaconf import DictConfig
 import time
 import logging
-import datetime
 import lightning as lit
+from typing import List
+from lightning import Callback, Trainer
+from lightning.pytorch.loggers import Logger
+from pathlib import Path
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -25,7 +28,10 @@ rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
 
 from modules.utils import (
-    console
+    console,
+    custom_log,
+    instantiators,
+    metrics
 )
 
 
@@ -49,14 +55,47 @@ def train(cfg: DictConfig) -> None:
         logging.info(f"Setting random seed to {cfg.seed}.")
         lit.seed_everything(cfg.seed, workers=True)
 
+    # INSTANTIATIONS
+
     logging.info(f"Instantiating model <{cfg.model._target_}>")
     model: lit.LightningModule = hydra.utils.instantiate(cfg.model)
 
     logging.info(f"Instantiating datamodule <{cfg.data._target_}>")
     datamodule: lit.LightningDataModule = hydra.utils.instantiate(cfg.data)
 
-    # finish training
-    logging.info(f"Train {cfg.name=} terminated, elapsed {time.process_time() - start_training} sec.")
+    logging.info("Instantiating callbacks...")
+    callbacks: List[Callback] = instantiators.instantiate_callbacks(cfg.get("callbacks"))
+
+    logging.info("Instantiating loggers...")
+    logger: List[Logger] = instantiators.instantiate_loggers(cfg.get("logger"))
+
+    logging.info(f"Instantiating trainer <{cfg.trainer._target_}>")
+    trainer: Trainer = hydra.utils.instantiate(cfg.trainer, callbacks=callbacks, logger=logger)
+
+    # SAVE HPARAMS
+
+    object_dict = {
+        "cfg": cfg,
+        "datamodule": datamodule,
+        "model": model,
+        "callbacks": callbacks,
+        "logger": logger,
+        "trainer": trainer,
+    }
+
+    if logger:
+        logging.info("Logging hyperparameters!")
+        custom_log.log_hyperparameters(object_dict)
+
+    # START TRAINING
+    logging.info("Start training!")
+    trainer.fit(model=model, datamodule=datamodule, ckpt_path=cfg.get("ckpt_path"))
+
+    train_result = trainer.callback_metrics
+    logging.info(f"Last train result = {train_result!r}")
+
+    # FINISH TRAINING
+    logging.success(f"Train {cfg.name=} finished, elapsed {time.process_time() - start_training} sec.")
     logging.info(f"Output dir: {cfg.paths.output_dir}")
 
 
