@@ -95,4 +95,16 @@ output directory
 
 </details>
 
+## How to ... ?
+
+<details>
+<summary><b>How to check configurations without training ?</b></summary>
+
+Activate the `dry_run` config parameter.
+```console
+train task=mnist dry_run=true
+```
+
+</details>
+
 [Button Icon]: https://img.shields.io/badge/USE_THIS_TEMPLATE-orange?style=for-the-badge

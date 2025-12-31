@@ -34,3 +34,6 @@ name: "train"
 
 # chk_path
 chk_path: null
+
+# no training if set true
+dry_run: False

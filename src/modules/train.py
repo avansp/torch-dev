@@ -7,7 +7,7 @@ import lightning as lit
 from typing import List
 from lightning import Callback, Trainer
 from lightning.pytorch.loggers import Logger
-from pathlib import Path
+
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -30,8 +30,7 @@ rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 from modules.utils import (
     console,
     custom_log,
-    instantiators,
-    metrics
+    instantiators
 )
 
 
@@ -86,6 +85,11 @@ def train(cfg: DictConfig) -> None:
     if logger:
         logging.info("Logging hyperparameters!")
         custom_log.log_hyperparameters(object_dict)
+
+    if cfg.dry_run:
+        logging.warning("Dry run is activated. No training.")
+        logging.info(f"Output dir: {cfg.paths.output_dir}")
+        return
 
     # START TRAINING
     logging.info("Start training!")
