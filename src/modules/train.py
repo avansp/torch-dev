@@ -9,6 +9,7 @@ from lightning import Callback, Trainer
 from lightning.pytorch.loggers import Logger
 
 
+
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
 # the setup_root above is equivalent to:
@@ -30,7 +31,8 @@ rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 from modules.utils import (
     console,
     custom_log,
-    instantiators
+    instantiators,
+    metrics
 )
 
 
@@ -71,7 +73,7 @@ def train(cfg: DictConfig) -> None:
     logging.info(f"Instantiating trainer <{cfg.trainer._target_}>")
     trainer: Trainer = hydra.utils.instantiate(cfg.trainer, callbacks=callbacks, logger=logger)
 
-    # SAVE HPARAMS
+    # SAVE HYPERPARAMETERS
 
     object_dict = {
         "cfg": cfg,
@@ -99,8 +101,13 @@ def train(cfg: DictConfig) -> None:
     logging.info(f"Last train result = {train_result!r}")
 
     # FINISH TRAINING
-    logging.success(f"Train {cfg.name=} finished, elapsed {time.process_time() - start_training} sec.")
+    logging.info(f"Train {cfg.name=} finished, elapsed {time.process_time() - start_training} sec.")
     logging.info(f"Output dir: {cfg.paths.output_dir}")
+
+    # this return function is needed for mruns (hparam search)
+    if cfg.get("optimized_metric"):
+        return metrics.get_metric_value(metric_dict=train_result, metric_name=cfg.get("optimized_metric"))
+
 
 
 if __name__ == "__main__":

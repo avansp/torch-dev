@@ -22,6 +22,7 @@ defaults:
   - data: null
   - model: null
   - task: ???
+  - mruns: null
 
 ## seed for random number generators in pytorch, numpy and python.random
 seed: 42
@@ -36,4 +37,7 @@ name: "train"
 chk_path: null
 
 # no training if set true
-dry_run: False
+dry_run: false
+
+# optimized metric should be set for returning a value
+optimized_metric: null
