@@ -95,4 +95,42 @@ output directory
 
 </details>
 
+## Multi-run mode
+
+Hydra allows `MULTIRUN` mode to run several training jobs sequentially. This can be useful for sweeping parameters (*hyperparameter searching*) or to do a cross-validation experiment. You can learn about multi-run mode from [Hydra documentation](https://hydra.cc/docs/tutorials/basic/running_your_app/multi-run/) or from the examples below.
+
+<details>
+<summary><b>Hyper-parameter searching with Optuna sweeper plugin</b></summary>
+
+Hyper-parameter searching can be performed by running the training process multiple times in the `MULTIRUN` mode. You can create a hyper-parameter searching config file under the `mruns` folder. An example is given in the [mnist_hparams.yaml](src/configs/mruns/mnist_hparams.yaml) config file using [Optuna sweeper plugin](https://hydra.cc/docs/plugins/optuna_sweeper/).
+
+```console
+train task=mnist mruns=mnist_hparams
+```
+
+An important part of that configuration file is the sweeping parameters, which define how to search hyperparameter values:
+```yaml
+# define hyperparameter search space
+params:
+  model.optimizer.lr: interval(0.0001, 0.1)
+  data.batch_size: choice(32, 64, 128, 256)
+  model.net.lin1_size: choice(64, 128, 256)
+  model.net.lin2_size: choice(64, 128, 256)
+  model.net.lin3_size: choice(32, 64, 128, 256)
+```
+
+</details>
+
+## How to ... ?
+
+<details>
+<summary><b>How to check configurations without training ?</b></summary>
+
+Activate the `dry_run` config parameter.
+```console
+train task=mnist dry_run=true
+```
+
+</details>
+
 [Button Icon]: https://img.shields.io/badge/USE_THIS_TEMPLATE-orange?style=for-the-badge

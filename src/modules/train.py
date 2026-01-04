@@ -7,7 +7,8 @@ import lightning as lit
 from typing import List
 from lightning import Callback, Trainer
 from lightning.pytorch.loggers import Logger
-from pathlib import Path
+
+
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -72,7 +73,7 @@ def train(cfg: DictConfig) -> None:
     logging.info(f"Instantiating trainer <{cfg.trainer._target_}>")
     trainer: Trainer = hydra.utils.instantiate(cfg.trainer, callbacks=callbacks, logger=logger)
 
-    # SAVE HPARAMS
+    # SAVE HYPERPARAMETERS
 
     object_dict = {
         "cfg": cfg,
@@ -87,6 +88,11 @@ def train(cfg: DictConfig) -> None:
         logging.info("Logging hyperparameters!")
         custom_log.log_hyperparameters(object_dict)
 
+    if cfg.dry_run:
+        logging.warning("Dry run is activated. No training.")
+        logging.info(f"Output dir: {cfg.paths.output_dir}")
+        return
+
     # START TRAINING
     logging.info("Start training!")
     trainer.fit(model=model, datamodule=datamodule, ckpt_path=cfg.get("ckpt_path"))
@@ -95,8 +101,13 @@ def train(cfg: DictConfig) -> None:
     logging.info(f"Last train result = {train_result!r}")
 
     # FINISH TRAINING
-    logging.success(f"Train {cfg.name=} finished, elapsed {time.process_time() - start_training} sec.")
+    logging.info(f"Train {cfg.name=} finished, elapsed {time.process_time() - start_training} sec.")
     logging.info(f"Output dir: {cfg.paths.output_dir}")
+
+    # this return function is needed for mruns (hparam search)
+    if cfg.get("optimized_metric"):
+        return metrics.get_metric_value(metric_dict=train_result, metric_name=cfg.get("optimized_metric"))
+
 
 
 if __name__ == "__main__":
