@@ -39,6 +39,8 @@ train task=mnist
 <details>
 <summary><b>Show data config</b></summary>
 
+<br>
+
 MNIST data is defined by [MNISTDataModule](src/modules/data/mnist_datamodule.py) class, and instantiated using a config file in [mnist.yaml](src/configs/task/mnist.yaml) file, as follows:
 
 ```yaml
@@ -56,6 +58,8 @@ data:
 <details>
 <summary><b>Show console output</b></summary>
 
+<br>
+
 ```console
 [2025-12-29 08:33:37,155][root][INFO] - Train cfg.name='mnist' started.
 ...
@@ -70,6 +74,8 @@ data:
 
 <details>
 <summary><b>Show output directory</b></summary>
+
+<br>
 
 ```
 output directory
@@ -102,6 +108,8 @@ Hydra allows `MULTIRUN` mode to run several training jobs sequentially. This can
 <details>
 <summary><b>Hyper-parameter searching with Optuna sweeper plugin</b></summary>
 
+<br>
+
 Hyper-parameter searching can be performed by running the training process multiple times in the `MULTIRUN` mode. You can create a hyper-parameter searching config file under the `mruns` folder. An example is given in the [mnist_hparams.yaml](src/configs/mruns/mnist_hparams.yaml) config file using [Optuna sweeper plugin](https://hydra.cc/docs/plugins/optuna_sweeper/).
 
 ```console
@@ -121,15 +129,55 @@ params:
 
 </details>
 
-## How to ... ?
+## How to's
 
 <details>
-<summary><b>How to check configurations without training ?</b></summary>
+<summary><b>How to check configurations without run the training</b></summary>
+
+<br>
 
 Activate the `dry_run` config parameter.
 ```console
 train task=mnist dry_run=true
 ```
+
+</details>
+
+<details>
+<summary><b>How to add a new logger</b></summary>
+<br>
+
+The default loggers use csv and tensorboard. Let's say you want to use another alternative logger for your training from [PyTorch Lightning's loggers](https://lightning.ai/docs/pytorch/stable/api_references.html#loggers). For example, the [MLFlowLogger](https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.loggers.mlflow.html#module-lightning.pytorch.loggers.mlflow) from [MLflow](https://mlflow.org/).
+
+You can easily add this in the [logger's default list](src/configs/logger/default.yaml) as follows:
+
+```yaml
+defaults:
+  - csv
+  - tensorboard
+  - mlflow
+```
+
+and create a new `mlflow.yaml` configuration as follows:
+
+```yaml
+mlflow:
+  _target_: lightning.pytorch.loggers.mlflow.MLFlowLogger
+  experiment_name: ${name}
+  run_name: ""
+  tracking_uri: ${paths.log_dir}/mlflow/ 
+  tags: null
+  prefix: ""
+  artifact_location: null
+```
+
+After training, go to `outputs/mlflow` folder and run MLFlow
+
+```console
+mlflow server --host 127.0.0.1 --port 8585
+```
+
+and open it from http://127.0.0.1:8585.
 
 </details>
 
