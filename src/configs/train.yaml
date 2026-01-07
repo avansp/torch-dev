@@ -19,10 +19,7 @@ defaults:
   - callbacks: default
   - logger: default
   - trainer: default
-  - data: null
-  - model: null
   - task: ???
-  - mruns: null
 
 ## seed for random number generators in pytorch, numpy and python.random
 seed: 42

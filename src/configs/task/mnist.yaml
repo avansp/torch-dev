@@ -11,7 +11,7 @@ name: mnist
 
 # override sub configs
 defaults:
-  - override /model: image_classifier
+  - /model: image_classifier
 
 # specific image dimension for the MNIST images
 model:
