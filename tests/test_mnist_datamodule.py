@@ -5,17 +5,19 @@ import torch
 
 
 @pytest.mark.parametrize("batch_size", [32, 128])
-def test_mnist_datamodule(batch_size: int, tmp_path: Path) -> None:
+def test_mnist_datamodule(batch_size: int) -> None:
     """Test the `MNISTDataModule` to verify that it can be downloaded correctly, that the necessary
     attributes were created (e.g., the dataloader objects), and that dtypes and batch sizes
     correctly match.
     """
-    dm = MNISTDataModule(data_dir=tmp_path, batch_size=batch_size)
+    data_dir = "data/"
+
+    dm = MNISTDataModule(data_dir=data_dir, batch_size=batch_size)
     dm.prepare_data()
 
     assert not dm.data_train and not dm.data_val and not dm.data_test
-    assert Path(tmp_path, "MNIST").exists()
-    assert Path(tmp_path, "MNIST", "raw").exists()
+    assert Path(data_dir, "MNIST").exists()
+    assert Path(data_dir, "MNIST", "raw").exists()
 
     dm.setup()
     assert dm.data_train and dm.data_val and dm.data_test
