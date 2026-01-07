@@ -4,6 +4,7 @@ from torchvision.transforms import transforms
 from torchvision.datasets import MNIST
 from torch.utils.data import ConcatDataset, DataLoader, Dataset, random_split
 import torch
+import logging
 
 
 class MNISTDataModule(lit.LightningDataModule):
@@ -20,7 +21,7 @@ class MNISTDataModule(lit.LightningDataModule):
     def __init__(
         self,
         data_dir: str,
-        train_val_test_split: Tuple[int, int, int] = (55_000, 5_000, 10_000),
+        train_pct: float = 0.7,
         batch_size: int = 64,
         num_workers: int = 0,
         pin_memory: bool = False,
@@ -80,14 +81,17 @@ class MNISTDataModule(lit.LightningDataModule):
                 )
             self.batch_size_per_device = self.hparams.batch_size // self.trainer.world_size
 
+        # load the train dataset
+        if not self.data_test:
+            self.data_test = MNIST(self.hparams.data_dir, train=False, transform=self.transforms)
+
         # load and split datasets only if not loaded already
-        if not self.data_train and not self.data_val and not self.data_test:
-            trainset = MNIST(self.hparams.data_dir, train=True, transform=self.transforms)
-            testset = MNIST(self.hparams.data_dir, train=False, transform=self.transforms)
-            dataset = ConcatDataset(datasets=[trainset, testset])
-            self.data_train, self.data_val, self.data_test = random_split(
+        if not self.data_train and not self.data_val:
+            dataset = MNIST(self.hparams.data_dir, train=True, transform=self.transforms)
+            split = [self.hparams.train_pct, 1.0 - self.hparams.train_pct]
+            self.data_train, self.data_val = random_split(
                 dataset=dataset,
-                lengths=self.hparams.train_val_test_split,
+                lengths=split,
                 generator=torch.Generator().manual_seed(42),
             )
 

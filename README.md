@@ -48,7 +48,7 @@ data:
   _target_: src.modules.data.mnist_datamodule.MNISTDataModule
   data_dir: ${paths.data_dir}
   batch_size: 128 # Needs to be divisible by the number of devices (e.g., if in a distributed setup)
-  train_val_test_split: [55_000, 5_000, 10_000]
+  train_pct: 0.7
   num_workers: 0
   pin_memory: False
 ```
@@ -100,6 +100,15 @@ output directory
 ```
 
 </details>
+
+
+## Evaluate 
+
+Evaluate the training performance. See all the available arguments using `--help` option:
+
+```console
+evaluate --help
+```
 
 ## Multi-run mode
 
