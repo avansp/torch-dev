@@ -129,15 +129,6 @@ output directory
 
 </details>
 
-
-## Evaluate 
-
-Evaluate the training performance. See all the available arguments using `--help` option:
-
-```console
-evaluate --help
-```
-
 ## Multi-run mode
 
 Hydra allows `MULTIRUN` mode to run several training jobs sequentially. This can be useful for sweeping parameters (*hyperparameter searching*) or to do a cross-validation experiment. See https://hydra.cc/docs/tutorials/basic/running_your_app/multi-run/.
