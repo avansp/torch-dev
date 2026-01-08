@@ -19,10 +19,6 @@ class BestModelCheckpoint(ModelCheckpoint):
     Attributes:
         CHECKPOINT_BEST_MODEL: A constant string used to denote the name for the best model
             checkpoints.
-
-        CHECKPOINT_EQUALS_CHAR: Character used for equations in naming checkpoints.
-
-        CHECKPOINT_JOIN_CHAR: Character used as a separator in checkpoint names.
     """
     CHECKPOINT_BEST_MODEL = "best_model"
 
@@ -126,6 +122,14 @@ class BestModelCheckpoint(ModelCheckpoint):
             assert current is not None
             self._update_best_and_save(current, trainer, monitor_candidates)
 
+            # save the metric too
+            train_result = trainer.callback_metrics
+            with open(Path(self.dirpath, "best_metric.csv"), "w") as fout:
+                fout.write("dataset, metric, value\n")
+                for k, v in train_result.items():
+                    dm = k.split('/')
+                    fout.write(f"{dm[0]}, {dm[1]}, {v}\n")
+
     @override
     def on_fit_end(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
         if not Path(self.best_model_path).is_file():
@@ -138,5 +142,13 @@ class BestModelCheckpoint(ModelCheckpoint):
         # create a link for the best checkpoint path
         best_path = self.format_checkpoint_name(self._monitor_candidates(trainer), self.CHECKPOINT_BEST_MODEL)
         self._link_checkpoint(trainer, self.best_model_path, best_path)
+
+        # save for the last metric too
+        train_result = trainer.callback_metrics
+        with open(Path(self.dirpath, "last_metric.csv"), "w") as fout:
+            fout.write("dataset, metric, value\n")
+            for k, v in train_result.items():
+                dm = k.split('/')
+                fout.write(f"{dm[0]}, {dm[1]}, {v}\n")
 
 
