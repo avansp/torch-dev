@@ -19,6 +19,8 @@ defaults:
   - callbacks: default
   - logger: default
   - trainer: default
+  - model: null
+  - data: null
   - task: ???
 
 ## seed for random number generators in pytorch, numpy and python.random
@@ -30,7 +32,7 @@ print_config: true
 # this name is mandatory to determine output path; see configs/paths/
 name: "train"
 
-# ckpt_path
+# to resume training from a checkpoint, set the path here
 ckpt_path: null
 
 # no training if set true
