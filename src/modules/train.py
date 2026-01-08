@@ -56,6 +56,10 @@ def train(cfg: DictConfig):
         logging.info(f"Setting random seed to {cfg.seed}.")
         lit.seed_everything(cfg.seed, workers=True)
 
+    if cfg.dry_run:
+        logging.warning("Dry run is activated. Use fast_dev=true during training.")
+        cfg.trainer.fast_dev_run = True
+
     # INSTANTIATIONS
 
     logging.info(f"Instantiating model <{cfg.model._target_}>")
@@ -87,11 +91,6 @@ def train(cfg: DictConfig):
     if logger:
         logging.info("Logging hyperparameters!")
         custom_log.log_hyperparameters(object_dict)
-
-    if cfg.dry_run:
-        logging.warning("Dry run is activated. No training.")
-        logging.info(f"Output dir: {cfg.paths.output_dir}")
-        return
 
     # START TRAINING
     logging.info("Start training!")
