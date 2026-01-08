@@ -56,10 +56,6 @@ def train(cfg: DictConfig):
         logging.info(f"Setting random seed to {cfg.seed}.")
         lit.seed_everything(cfg.seed, workers=True)
 
-    if cfg.dry_run:
-        logging.warning("Dry run is activated. Use fast_dev=true during training.")
-        cfg.trainer.fast_dev_run = True
-
     # INSTANTIATIONS
 
     logging.info(f"Instantiating model <{cfg.model._target_}>")
@@ -105,8 +101,6 @@ def train(cfg: DictConfig):
     # LAST MODEL
     train_result = trainer.callback_metrics
     logging.info(f"Last train result = {train_result!r}")
-
-    # FINISH TRAINING
 
     # this return function is needed for mruns (hparam search)
     if cfg.get("optimized_metric"):

@@ -35,8 +35,5 @@ name: "train"
 # to resume training from a checkpoint, set the path here
 ckpt_path: null
 
-# no training if set true
-dry_run: false
-
 # optimized metric should be set for returning a value
 optimized_metric: null

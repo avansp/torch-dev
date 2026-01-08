@@ -9,7 +9,7 @@
 
 </div>
 
-This is a template to create a pyTorch structure using [Lightning](https://github.com/Lightning-AI/pytorch-lightning) and [Hydra](https://github.com/facebookresearch/hydra) framework, simplified from [Ashleve's Lightning-Hydra-Template](https://github.com/ashleve/lightning-hydra-template/tree/main) template.
+`TORCH-DEV` is a template to create a pyTorch structure using [Lightning](https://github.com/Lightning-AI/pytorch-lightning) and [Hydra](https://github.com/facebookresearch/hydra) framework, simplified from [Ashleve's Lightning-Hydra-Template](https://github.com/ashleve/lightning-hydra-template/tree/main).
 
 <div align="center">
 
@@ -138,7 +138,7 @@ evaluate --help
 
 ## Multi-run mode
 
-Hydra allows `MULTIRUN` mode to run several training jobs sequentially. This can be useful for sweeping parameters (*hyperparameter searching*) or to do a cross-validation experiment. You can learn about multi-run mode from [Hydra documentation](https://hydra.cc/docs/tutorials/basic/running_your_app/multi-run/) or from the examples below.
+Hydra allows `MULTIRUN` mode to run several training jobs sequentially. This can be useful for sweeping parameters (*hyperparameter searching*) or to do a cross-validation experiment. See https://hydra.cc/docs/tutorials/basic/running_your_app/multi-run/.
 
 <details>
 <summary><b>Hyper-parameter searching with Optuna sweeper plugin</b></summary>
@@ -167,14 +167,34 @@ params:
 ## How to's
 
 <details>
-<summary><b>How to check configurations and run sanity check training</b></summary>
+<summary><b>How to run sanity check training</b></summary>
 
 <br>
 
-Activate the `dry_run` config parameter:
+Use the `sanity_check.yaml` configuration for the trainer:
 
 ```console
-train task=mnist dry_run=true
+train task=mnist trainer=sanity_check
+```
+
+You can also test to run the training for 5 training steps:
+
+```console
+train task=mnist trainer=sanity_check trainer.fast_dev_run=5
+```
+
+Note that the fast_dev_run flag will disable all loggers and some callbacks. See https://lightning.ai/docs/pytorch/stable/common/trainer.html#fast-dev-run.
+
+</details>
+
+<details>
+<summary><b>How to resume training</b></summary>
+<br>
+
+Use the last checkpoint to start the new training. E.g:
+
+```console
+train task=mnist ckpt_path=outputs/mnist/runs/2026-01-08_10-03-47/checkpoints/last.ckpt
 ```
 
 </details>
