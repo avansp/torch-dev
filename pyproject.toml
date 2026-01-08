@@ -1,6 +1,6 @@
 [project]
-name = "template-hydra-lignting"
-version = "0.0.1"
+name = "torch-dev"
+version = "0.1"
 description = "A simple template to create ML project using PyTorch Lightning and Hydra."
 authors = [
     {name="Avan Suinesiaputra", email="avan.sp@gmail.com"}
@@ -18,3 +18,4 @@ build-backend = "setuptools.build_meta"
 
 [project.scripts]
 train = "modules.train:train"
+evaluate = "modules.eval:eval"

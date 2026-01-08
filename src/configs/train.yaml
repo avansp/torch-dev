@@ -19,10 +19,9 @@ defaults:
   - callbacks: default
   - logger: default
   - trainer: default
-  - data: null
   - model: null
+  - data: null
   - task: ???
-  - mruns: null
 
 ## seed for random number generators in pytorch, numpy and python.random
 seed: 42
@@ -33,11 +32,8 @@ print_config: true
 # this name is mandatory to determine output path; see configs/paths/
 name: "train"
 
-# chk_path
-chk_path: null
-
-# no training if set true
-dry_run: false
+# to resume training from a checkpoint, set the path here
+ckpt_path: null
 
 # optimized metric should be set for returning a value
 optimized_metric: null

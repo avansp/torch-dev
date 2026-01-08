@@ -37,7 +37,7 @@ from modules.utils import (
 
 
 @hydra.main(version_base="1.3", config_path="../configs", config_name="train.yaml")
-def train(cfg: DictConfig) -> None:
+def train(cfg: DictConfig):
     """
     Main entry point for training
     
@@ -88,21 +88,19 @@ def train(cfg: DictConfig) -> None:
         logging.info("Logging hyperparameters!")
         custom_log.log_hyperparameters(object_dict)
 
-    if cfg.dry_run:
-        logging.warning("Dry run is activated. No training.")
-        logging.info(f"Output dir: {cfg.paths.output_dir}")
-        return
-
     # START TRAINING
     logging.info("Start training!")
-    trainer.fit(model=model, datamodule=datamodule, ckpt_path=cfg.get("ckpt_path"))
+    ckpt_path = cfg.get("ckpt_path")
+    if ckpt_path is not None:
+        logging.info(f"Resume training from {ckpt_path}")
+    trainer.fit(model=model, datamodule=datamodule, ckpt_path=ckpt_path, weights_only=False)
 
-    train_result = trainer.callback_metrics
-    logging.info(f"Last train result = {train_result!r}")
-
-    # FINISH TRAINING
     logging.info(f"Train {cfg.name=} finished, elapsed {time.process_time() - start_training} sec.")
     logging.info(f"Output dir: {cfg.paths.output_dir}")
+
+    # LAST MODEL
+    train_result = trainer.callback_metrics
+    logging.info(f"Last train result = {train_result!r}")
 
     # this return function is needed for mruns (hparam search)
     if cfg.get("optimized_metric"):
