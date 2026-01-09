@@ -13,7 +13,7 @@
 
 <div align="center">
 
-[![Button Icon]](https://github.com/ashleve/lightning-hydra-template/generate)
+[![Button Icon]](https://github.com/avansp/torch-dev/generate)
 
 </div>
 
