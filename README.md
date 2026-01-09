@@ -13,7 +13,7 @@
 
 <div align="center">
 
-[![Button Icon]](https://github.com/ashleve/lightning-hydra-template/generate)
+[![Button Icon]](https://github.com/avansp/torch-dev/generate)
 
 </div>
 
@@ -128,15 +128,6 @@ output directory
 ```
 
 </details>
-
-
-## Evaluate 
-
-Evaluate the training performance. See all the available arguments using `--help` option:
-
-```console
-evaluate --help
-```
 
 ## Multi-run mode
 
